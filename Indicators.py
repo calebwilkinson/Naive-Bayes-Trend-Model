@@ -91,7 +91,7 @@ def rsi(ticker, period):
 
         return rsi_readings, raw_data
 
-def
+def 20
 
 
 
