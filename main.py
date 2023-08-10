@@ -1,6 +1,5 @@
 import model
 import sql_tables as st
-import graphs as g
 
 all_tickers = {'NDX':'^NDX',
                'RUT':'^RUT',
@@ -123,11 +122,11 @@ def update_all_data():
     st.update_ma_table('RUT')
     st.update_ma_table('DJI')
 
-model.query_user()
+# model.query_user()
 
-g.rsi_scatter(10)
-g.training_data()
-g.stoch_matrix()
+# update_all_data()
+
+
 
 
 

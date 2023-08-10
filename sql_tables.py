@@ -21,7 +21,7 @@ def new_ticker_tbl(ticker, yf_name):
      print('Table ' + ticker + ' has been created.')
 
      data = yf.download(yf_name, period='max') # Downloads into pandas DataFrame
-     prev_price = .1
+     prev_price = .1 # Since 1st index won't have prev_price
      for index, row in data.iterrows(): # Index is Date
           change = ((row['Close']-prev_price)/prev_price)*100 # Calculate price Change % from previous close.
 
@@ -102,7 +102,6 @@ def new_indi_tbl(ticker):
                    "FOREIGN KEY (Date, Price) REFERENCES " + ticker + "(Date, Price));")
     cursor.commit()
     print('Table ' + new_table_name + ' has been created.')
-    # Connect to SQL server
 
     cursor.execute("SELECT Date,Price,High,Low,[Change %] FROM " + ticker + " Order By Date ASC")
 
@@ -183,6 +182,7 @@ def new_fwd_ret_tbl(ticker):
     date = server_data[-1][0]
     print('Data up to ' + date.strftime('%Y-%m-%d') + ' has been inserted into ' + new_table_name + '.')
 
+# UPDATES TICKER TABLE
 def update_tickers(ticker_dict):
     for ticker, yf_name in ticker_dict.items():
         cursor = sql.Access_Server()
@@ -193,7 +193,7 @@ def update_tickers(ticker_dict):
         if (len(data) <= 1):
             print(ticker + ' is already up to date.')
         else:
-            prev_price = 0
+            prev_price = 0.0001
             for index, row in data.iterrows():  # Index is Date
                 if index == recent_date[0]:
                     prev_price = row['Close']
@@ -209,6 +209,7 @@ def update_tickers(ticker_dict):
                     update_fwd_returns(ticker)
             print(ticker + ' is now up to date.')
 
+# UPDATES INDICATOR TABLE
 def update_indicators(ticker):
     period_list = [3, 5, 10, 15, 20]
 
@@ -232,6 +233,7 @@ def update_indicators(ticker):
             cursor.commit()
         cursor.commit()
 
+# UPDATE 20 MA TABLE
 def update_twenty_ma(ticker):
     cursor = sql.Access_Server()
     cursor.execute("SELECT TOP(20) Date, Price FROM " + ticker + " ORDER BY Date DESC")
@@ -249,6 +251,7 @@ def update_twenty_ma(ticker):
                    + str(std_deviation * 3) + ");")
     cursor.commit()
 
+# UPDATE FORWARD RETURNS TABLE
 def update_fwd_returns(ticker):
     cursor = sql.Access_Server()
     cursor.execute("SELECT TOP(21) Date, Price FROM " + ticker + " ORDER BY Date DESC")
@@ -266,9 +269,9 @@ def update_fwd_returns(ticker):
         cursor.execute("UPDATE " + ticker + "_Fwd_Returns "
                            "SET Fwd_" + str(period) + "d = ? WHERE Date = ?",
                            delta, price_list[period][0] )
-
     cursor.commit()
 
+# CREATES NEW VALUE TABLE
 def new_value_tbl():
     cursor = sql.Access_Server()
     cursor.execute("CREATE TABLE Value ("
@@ -299,6 +302,7 @@ def new_value_tbl():
     cursor.commit()
     print('Table Value has been created. Date and Price from SPX have been inserted. ')
 
+# CREATES NEW 20 DAY MOVING AVERAGE TABLE
 def new_20dma_value(ticker):
     cursor = sql.Access_Server()
     tbl_name = ticker + '_20d_MA_Value'
@@ -328,6 +332,7 @@ def new_20dma_value(ticker):
 
     print('Data has been inserted')
 
+# UPDATE MOVING AVERAGE TABLE
 def update_ma_table(ticker):
     ticker_data = sql.select_most_recent(ticker) # Selects most recent Date entry.
     value = sql.select_most_recent(ticker + '_20D_MA_VALUE')
@@ -347,7 +352,7 @@ def update_ma_table(ticker):
             fr.one_stdDev(ticker, date)
             fr.two_stdDev(ticker, date)
 
-# Script to fill blank Values table.
+# Fills blank Values table.
 def value_tbl_insert(ticker_dict, dict_name):
     global start_date, end_date
     cursor = sql.Access_Server()

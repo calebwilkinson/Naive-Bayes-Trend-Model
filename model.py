@@ -13,19 +13,19 @@ cmap = plt.cm.inferno
 import SQL_Server_Access as sql
 
 def query_user():
-    val = input('Would you like to view the UP/DOWN prediction for SPX, DJI, RUT, or NDX: \n')
+    val = input('Would you like to view the UP/DOWN prediction for SPX, DJI, RUT, or NDX? reply with index: \n')
     val2 = input('Would you like a prediction over 3, 5, 10, or 15 days? ')
     xtest3, xtest5, xtest10, xtest15, date, price = new_date(val)
     v3, v5, v10, v15 = new_model_data(xtest3,xtest5,xtest10,xtest15, val)
 
     if int(val2) == 3:
-       print(val + " is expected to be up in 3 days!") if v3[0] == 1 else print(val + "is expected to be down in 3 days!")
+       print(val + " is expected to be up in 3 days!") if v3[0] == 1 else print(val + " is expected to be down in 3 days!")
     elif int(val2) == 5:
-       print(val + " is expected to be up in 5 days!") if v3[0] == 1 else print(val + "is expected to be down in 5 days!")
+       print(val + " is expected to be up in 5 days!") if v3[0] == 1 else print(val + " is expected to be down in 5 days!")
     elif int(val2) == 10:
-       print(val + " is expected to be up in 10 days!") if v3[0] == 1 else print(val + "is expected to be down in 10 days!")
+       print(val + " is expected to be up in 10 days!") if v3[0] == 1 else print(val + " is expected to be down in 10 days!")
     elif int(val2) == 15:
-        print(val + " is expected to be up in 15 days!") if v3[0] == 1 else print(val + "is expected to be down in 15 days!")
+        print(val + " is expected to be up in 15 days!") if v3[0] == 1 else print(val + " is expected to be down in 15 days!")
 
 
 def train_two_std(ticker):
@@ -306,7 +306,7 @@ def new_date(ticker):
 
     return new_test3, new_test5, new_test10, new_test15, date, price
 
-def train_test_spx(ticker):
+def train_test(ticker):
     df3, df5, df10, df15 = train_two_std(ticker)
     af = train_rsi(ticker)
     hf3, hf5, hf10, hf15 = train_ma_combo(ticker)
@@ -367,29 +367,29 @@ def train_test_spx(ticker):
     save_fit_10 = gnb.fit(X_test10, rf10['ActRet'])
     save_fit_15 = gnb.fit(X_test15, rf15['ActRet'])
 
-    # with open('nb_3_RUT.pkl', 'wb') as fid:
-    #     pickle.dump(save_fit_3, fid)
-    #
-    # with open('nb_5_RUT.pkl', 'wb') as fid:
-    #     pickle.dump(save_fit_5, fid)
-    #
-    # with open('nb_10_RUT.pkl', 'wb') as fid:
-    #     pickle.dump(save_fit_10, fid)
-    #
-    # with open('nb_15_RUT.pkl', 'wb') as fid:
-    #     pickle.dump(save_fit_15, fid)
+    with open('nb_3_' + ticker +'.pkl', 'wb') as fid:
+        pickle.dump(save_fit_3, fid)
+
+    with open('nb_5_' + ticker + '.pkl', 'wb') as fid:
+        pickle.dump(save_fit_5, fid)
+
+    with open('nb_10_' + ticker + '.pkl', 'wb') as fid:
+        pickle.dump(save_fit_10, fid)
+
+    with open('nb_15_' + ticker + '.pkl', 'wb') as fid:
+       pickle.dump(save_fit_15, fid)
 
 def new_model_data(xtest3, xtest5, xtest10, xtest15, ticker):
-    with open('nb_3_'+ticker+'.pkl', 'rb') as fid:
+    with open('model/nb_3_'+ticker+'.pkl', 'rb') as fid:
         gnb_loaded3 = pickle.load(fid)
 
-    with open('nb_5_'+ticker+'.pkl', 'rb') as fid:
+    with open('model/nb_5_'+ticker+'.pkl', 'rb') as fid:
         gnb_loaded5 = pickle.load(fid)
 
-    with open('nb_10_'+ticker+'.pkl', 'rb') as fid:
+    with open('model/nb_10_'+ticker+'.pkl', 'rb') as fid:
         gnb_loaded10 = pickle.load(fid)
 
-    with open('nb_15_'+ticker+'.pkl', 'rb') as fid:
+    with open('model/nb_15_'+ticker+'.pkl', 'rb') as fid:
         gnb_loaded15 = pickle.load(fid)
 
     y_pred3 = gnb_loaded3.predict([xtest3])
@@ -402,12 +402,12 @@ def new_model_data(xtest3, xtest5, xtest10, xtest15, ticker):
 # tickers = ['SPX', 'RUT', 'NDX', 'DJI']
 # for ticker in tickers:
 #
-#     train_test_spx(ticker)
+train_test('DJI')
 # rsi_scatter(ef3, ef5, ef10, ef15)
 
 # xtest3, xtest5, xtest10, xtest15, date, price = new_date('SPX')
 # pred3, pred5, pred10, pred15 = new_model_data(xtest3, xtest5, xtest10, xtest15)
-#
+#dj
 # print(pred3, pred5, pred10, pred15)
 
 

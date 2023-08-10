@@ -54,7 +54,6 @@ def two_std_returns(data_list, direction):
     plt.hist(df5['5d Return'], alpha = 0.8, color = 'darkorange', edgecolor='black', bins = 20)
     plt.title('5 day Forward Returns',size=5)
 
-
     plt.subplot(233)
     plt.hist(df10['10d Return'], alpha=0.8, color='darkorange', edgecolor='black', bins=20)
     plt.title('10 day Forward Returns', size=5)
@@ -65,6 +64,7 @@ def two_std_returns(data_list, direction):
 
     plt.show()
 
+# Histogram of Combination occurrences
 def combo_hist(df3, df5, df10, df15):
     plt.subplot(231)
     plt.hist(df3['MA Combo'], color='darkorange', edgecolor='black', bins=10)
@@ -121,8 +121,6 @@ def rsi_hist(df3, df5, df10, df15):
     plt.title('Unique Combo Occurrences', size=12)
 
     plt.show()
-
-# rsi_scatter(15)
 
 # rsi_scatter(15)
 # training_data()

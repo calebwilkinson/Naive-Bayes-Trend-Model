@@ -24,6 +24,7 @@ def ma_break(ticker, date):
             else: # If price at exactly 20_MA
                 sql.update_col_on_date(ticker+'_20d_MA_Value', 'MA_BREAK', 'AT', date)
 
+# Calculates Two Standard Deviation, checks ticker's price relation.
 def two_stdDev(ticker, date):
     ma_tbl_data = sql.select_on_date(ticker+'_20D', date)
     # ma_tbl_data Format = | Date | Price | Twenty_MA | StdDev_1 | StdDev_2 | StdDev_3 |
@@ -52,6 +53,7 @@ def two_stdDev(ticker, date):
     else:
         sql.update_col_on_date(ticker + '_20d_MA_Value', '2STD_BREAK', 'NONE', date)
 
+# Gets One Standard Deviation, checks ticker's price relation.
 def one_stdDev(ticker, date):
     ma_tbl_data = sql.select_on_date(ticker + '_20D', date)
     # ma_tbl_data Format = | Date | Price | Twenty_MA | StdDev_1 | StdDev_2 | StdDev_3 |
