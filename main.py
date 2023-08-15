@@ -124,7 +124,7 @@ def update_all_data():
 
 
 
-# model.query_user()
+model.query_user()
 # model.train_test(ticker)
 # update_all_data()
 
