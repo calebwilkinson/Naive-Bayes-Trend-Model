@@ -402,7 +402,7 @@ def new_model_data(xtest3, xtest5, xtest10, xtest15, ticker):
 # tickers = ['SPX', 'RUT', 'NDX', 'DJI']
 # for ticker in tickers:
 #
-train_test('DJI')
+# train_test('DJI')
 # rsi_scatter(ef3, ef5, ef10, ef15)
 
 # xtest3, xtest5, xtest10, xtest15, date, price = new_date('SPX')

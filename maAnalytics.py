@@ -9,20 +9,11 @@ def ma_break(ticker, date):
     ticker_data = sql.select_on_date(ticker, date)
     # ma_tbl_data Format = | Date | Price | Twenty_MA | StdDev_1 | StdDev_2 | StdDev_3 |
     # ticker_data Format = | Date | Price | Open | High | Low | Change %
-    value = bool(ticker_data[3] > ma_tbl_data[2] > ticker_data[4]) # Does daily price range contain Twenty_MA
-    match value:
-        case True: # Daily price range did contain 20_MA
-            if ma_tbl_data[1] > ma_tbl_data[2]: # If price broke 20_MA to the upside
-                sql.update_col_on_date(ticker+'_20d_MA_Value', 'MA_BREAK', 'STRONG', date)
-            elif ma_tbl_data[1] < ma_tbl_data[2]: # If Price broke 20_MA to the downside
-                sql.update_col_on_date(ticker+'_20d_MA_Value', 'MA_BREAK', 'WEAK', date)
-        case False: # Daily price range did not contain 20_MA
-            if ma_tbl_data[1] > ma_tbl_data[2]: # If price above 20_MA
-                sql.update_col_on_date(ticker + '_20d_MA_Value', 'MA_BREAK', 'ABOVE', date)
-            elif ma_tbl_data[1] < ma_tbl_data[2]: # If price below 20_MA
-                sql.update_col_on_date(ticker + '_20d_MA_Value', 'MA_BREAK', 'BELOW', date)
-            else: # If price at exactly 20_MA
-                sql.update_col_on_date(ticker+'_20d_MA_Value', 'MA_BREAK', 'AT', date)
+
+    if ma_tbl_data[1] >= ma_tbl_data[2]: # If price above 20_MA
+        sql.update_col_on_date(ticker + '_20d_MA_Value', 'MA_BREAK', 'ABOVE', date)
+    elif ma_tbl_data[1] < ma_tbl_data[2]: # If price below 20_MA
+        sql.update_col_on_date(ticker + '_20d_MA_Value', 'MA_BREAK', 'BELOW', date)
 
 # Calculates Two Standard Deviation, checks ticker's price relation.
 def two_stdDev(ticker, date):

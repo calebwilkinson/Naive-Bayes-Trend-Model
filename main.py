@@ -122,8 +122,10 @@ def update_all_data():
     st.update_ma_table('RUT')
     st.update_ma_table('DJI')
 
-# model.query_user()
 
+
+# model.query_user()
+# model.train_test(ticker)
 # update_all_data()
 
 
